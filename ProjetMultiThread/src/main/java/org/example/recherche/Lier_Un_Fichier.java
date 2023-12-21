@@ -1,4 +1,4 @@
-package org.example.recheche;
+package org.example.recherche;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class LierUnFichier {
+public class Lier_Un_Fichier {
     private String path;
     private List<String[]> sections;
     private AtomicInteger currentSectionIndex = new AtomicInteger(0);
@@ -18,11 +18,11 @@ public class LierUnFichier {
     private AtomicInteger ligneSection = new AtomicInteger(0);
     private Collection<Thread> threads;
     private int numberOfPages;
-
+    private final Object resultMapLock = new Object();
     private static ConcurrentHashMap<String, String> list = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, List<String>> resultMap = new ConcurrentHashMap<>();
 
-    public LierUnFichier(String path) throws IOException {
+    public Lier_Un_Fichier(String path) throws IOException {
         this.path = path;
         this.sections = divideIntoSections();
         threads = new ArrayList<>();
@@ -98,10 +98,12 @@ public class LierUnFichier {
                 wordFound.set(true);
                 int absolutePageIndex = computeAbsolutePageIndex(indexSection, pageIndex, numberOfPages);
 
-                resultMap.computeIfAbsent(targetPhrase, k -> new ArrayList<>()).add(absolutePageIndex + "\n" + pageText);
+                // Utilisation  du  moniteur pour synchroniser l'accès à resultMap
+                synchronized (resultMapLock) {
+                    resultMap.computeIfAbsent(targetPhrase, k -> new ArrayList<>()).add("" + absolutePageIndex);
+                }
             }
         }
-
     }
 
     public static Boolean containsPhrase(String text, String phrase) {

@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.recheche.LierUnFichier;
+import org.example.recherche.Lier_Un_Fichier;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class Main {
 
 
         long startTime = System.currentTimeMillis();
-        LierUnFichier fichier = new LierUnFichier("/Users/mamadoucirecamara/Desktop/TP_Master/MultiThreadProjetJava/ProjetMultiThread/src/main/resources/PythonNotesForProfessionals.pdf");
+        Lier_Un_Fichier fichier = new Lier_Un_Fichier("/Users/mamadoucirecamara/Desktop/TP_Master/MultiThreadProjetJava/ProjetMultiThread/src/main/resources/PythonNotesForProfessionals.pdf");
         fichier.search("Iterating");
           fichier.Affichage();
         long endTime = System.currentTimeMillis();
